@@ -1,0 +1,36 @@
+diff --git a/main/meson/APKBUILD b/main/meson/APKBUILD
+index d9c7ee28cd9..6fe826e7a39 100644
+--- a/main/meson/APKBUILD
++++ b/main/meson/APKBUILD
+@@ -50,6 +50,7 @@ subpackages="
+ source="https://github.com/mesonbuild/meson/releases/download/$pkgver/meson-$pkgver.tar.gz
+ 	fix-ninja-output-test.patch
+ 	skip-broken-tests.patch
++	fix-pkgconfig-lookup.patch
+ 	abuild-meson
+ 	"
+ 
+@@ -114,5 +115,6 @@ sha512sums="
+ b4ca7a3b667db0ad370110abd8b20467b1c74ae7777a068db33f8974602c123881a7130b2340664abb52e36fe5195989a5cc8fa7de6212c37abf5b0900554425  meson-1.6.1.tar.gz
+ ff267ae6c6fe9ae6c57506f52735151b08f89eac5733777694f1d949d66b246ec277b91ec578ae31be0ef03b31c87f51616e069ead2e21920155c77ad82de6bd  fix-ninja-output-test.patch
+ 0bbbf65f56f4feab43b4ec3fbe7d4c64ef9abb563ea114d0b960048319b936dd577e538a762991661a1cb256f32c0da0fef2d3add07730e37a8bbd4ec27dc611  skip-broken-tests.patch
++07c5aec431fa7ff94eff12f59c3c42d40850656c7f2e90cfec78f7eb29664a6f66dca7e263dbb250928bf2a7f98109b430e4dc4335f8d319ca3c156eba7d53bc  fix-pkgconfig-lookup.patch
+ 015030aa7fcc658b74a9e58a6bf67070450def0f58fb75c7bba3dbe5ba3556d7d16a4710710ed286e5bb4a7efa90c5e0abbc63b0a8be37f499c0e7862e26d150  abuild-meson
+ "
+diff --git a/main/meson/fix-pkgconfig-lookup.patch b/main/meson/fix-pkgconfig-lookup.patch
+new file mode 100644
+index 00000000000..26e11ebd38d
+--- /dev/null
++++ b/main/meson/fix-pkgconfig-lookup.patch
+@@ -0,0 +1,11 @@
++--- a/mesonbuild/dependencies/pkgconfig.py
+++++ b/mesonbuild/dependencies/pkgconfig.py
++@@ -223,7 +223,7 @@
++             return
++ 
++         for potential_pkgbin in find_external_program(self.env, self.for_machine, "pkg-config", "Pkg-config",
++-                                                      self.env.default_pkgconfig, allow_default_for_cross=False):
+++                                                      self.env.default_pkgconfig, allow_default_for_cross=True):
++             if validate(potential_pkgbin):
++                 return
++         self.pkgbin = None
