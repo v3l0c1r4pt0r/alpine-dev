@@ -20,5 +20,5 @@ jobs:
         docker save alpine-dev:aarch64 >alpine-dev:aarch64
     - uses: actions/upload-artifact@v4
       with:
-        name: alpine-dev:aarch64
+        name: alpine-dev.aarch64
         path: alpine-dev:aarch64
